@@ -100,8 +100,8 @@ namespace LinBox
 	
 		void setEntry (size_t i, size_t j, const Element &a_ij) {_rep[i * _col + j] = a_ij;}
 		Element &refEntry (size_t i, size_t j) {return _rep[i * _col + j];}
-		const Element &getEntry (size_t i, size_t j) const {return _rep[i * _col + j];}
-		Element &getEntry (Element &x, size_t i, size_t j) const {return _rep[i * _col + j];}
+		Element &getEntry (size_t i, size_t j) {return _rep[i * _col + j];}
+		Element &getEntry (Element &x, size_t i, size_t j) {return _rep[i * _col + j];}
 
 		///////
 		//i/o//
