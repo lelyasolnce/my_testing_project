@@ -12,6 +12,7 @@
 #include "/home/slb/fakeit/my_modular.h"
 //!#include <givaro/givpoly1dense.h>
 //!#include <givaro/givpoly1denseops.inl>
+#include "/home/slb/fakeit/GivPol.h"
 
 namespace LinBox
 {
@@ -32,21 +33,29 @@ namespace LinBox
 		typedef typename Field::Element Element;
 		typedef _MatrixElement MatrixElement;
 		typedef std::vector<MatrixElement> Rep;
-		typedef Givaro::Modular<MatrixElement> IntField; //???
+		typedef Givaro::Modular<MatrixElement> IntField;
 		typedef SlicedPolynomialMatrix<Field, MatrixElement> Self_t;
-		//!typedef Givaro::Poly1Dom<IntField, Dense>::Rep polynomial;
+		typedef typename Givaro::Poly1Dom<IntField>::Rep polynomial; //Dense
 	private:
 		_Field *GF;
 		IntField F;
 	private:
 		int e;//GF.cardinality() == p^e
 		std::vector<BlasMatrix<IntField, Rep>> V;
-	//!public:
-		//!polynomial irreducible;
-	private:
-		//polynomial& modulo(polynomial& g, polynomial&h, polynomial& f);
-		//bool rabin(int n, int q, int a, int b);
-		//void setIrreduciblePlynomial(int max_steps = 1000000);
+		typedef typename Field::Residu_t GFqDompolynomial;
+	public:
+		polynomial irreducible()
+		{
+			polynomial res;
+			size_t p = GF->characteristic();
+			GFqDompolynomial z = GF->irreducible();
+			for (size_t i = 0; i <= e; i++)
+			{
+				res.push_back(z % p);
+				z = z / p;
+			}
+			return res;
+		}
 
 						////////////////
 		        			//Constructors//
@@ -59,7 +68,7 @@ namespace LinBox
 
 		/*Allocates a vector of $ m1 \times m2\f$ zero matrices (shaped and ready). Irreducible polynomial is chosen randomly.
 		 */
-		SlicedPolynomialMatrix (_Field &BF, const size_t & m1, const size_t &m2);
+		SlicedPolynomialMatrix (_Field &BF, size_t & m1, size_t &m2);
 
 						///////////////
 						// Destructor//
@@ -76,17 +85,17 @@ namespace LinBox
 		/*Get length of V.
 		 * @returns length of V
 		 */
-		size_t length() const;
+		size_t length();
 		
 		/*Get the number of rows in a matrix.
 		 * @returns Number of rows in a matrix
 		 */
-		size_t rowdim() const;
+		size_t rowdim();
 
 		/* Get the number of columns in a matrix.
 		 * @returns Number of columns in a matrix
 		 */
-		size_t coldim() const;
+		size_t coldim();
 		
 	                    			/////////////////
 	                    			//return fields//
@@ -137,7 +146,7 @@ namespace LinBox
 		 * @param m matrix-coefficient number, 0...length() - 1
 		 * @param V_m matrix to set
 		 */
-		void setMatrixCoefficient (size_t m, const BlasMatrix<IntField, Rep> &V_m) ;
+		void setMatrixCoefficient (size_t m, BlasMatrix<IntField, Rep> &V_m) ;
 
 	private:
 		/* Get a writeable reference to the m-th matrix-coefficient.
@@ -151,7 +160,7 @@ namespace LinBox
 		 * @param m matrix-coefficient number, 0...length() - 1
 		 * @returns Const reference to matrix-coefficent
 		 */
-		const BlasMatrix<IntField, Rep> &getMatrixCoefficient (size_t m) const ;
+		BlasMatrix<IntField, Rep> &getMatrixCoefficient (size_t m);
 
 						/////////
 		                		//swaps//
@@ -177,7 +186,7 @@ namespace LinBox
 		 * @param[in] tV
 		 * @return the transposed polynomial matrix of this.
 		 */
-		Self_t transpose(Self_t & tV) const;
+		Self_t transpose(Self_t & tV);
 		
 								//////////////////
 		                				//input / output//
