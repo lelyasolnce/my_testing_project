@@ -7,7 +7,9 @@
 /*!#include "linbox/matrix/DenseMatrix/blas-matrix.h"*/
 /**/
 #include "/home/slb/fakeit/myBM.h"/*!*/
-#include <givaro/modular.h>
+/*!#include <givaro/modular.h>*/
+/**/
+#include "/home/slb/fakeit/my_modular.h"
 //!#include <givaro/givpoly1dense.h>
 //!#include <givaro/givpoly1denseops.inl>
 
