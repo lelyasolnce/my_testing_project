@@ -36,7 +36,7 @@ namespace LinBox
 		typedef SlicedPolynomialMatrix<Field, MatrixElement> Self_t;
 		//!typedef Givaro::Poly1Dom<IntField, Dense>::Rep polynomial;
 	private:
-		Field *GF;
+		_Field *GF;
 		IntField F;
 	private:
 		int e;//GF.cardinality() == p^e
@@ -55,18 +55,18 @@ namespace LinBox
 	public:
 		/*! Allocates a vector of new \f$ 0 \times 0\f$ matrices (shaped and ready). Irreducible polynomial is chosen randomly.
 		 */
-		SlicedPolynomialMatrix (const Field &BF);
+		SlicedPolynomialMatrix (_Field &BF);
 
 		/*Allocates a vector of $ m1 \times m2\f$ zero matrices (shaped and ready). Irreducible polynomial is chosen randomly.
 		 */
-		SlicedPolynomialMatrix (const Field &BF, const size_t & m1, const size_t &m2);
+		SlicedPolynomialMatrix (_Field &BF, const size_t & m1, const size_t &m2);
 
 						///////////////
 						// Destructor//
 						///////////////
 
 	public:
-		~SlicedPolynomialMatrix();
+		~SlicedPolynomialMatrix() {}
 
 						////////////////////////
 	          				//dimensions of vector//
@@ -93,9 +93,9 @@ namespace LinBox
 	                    			/////////////////
 	
 	public:
-		const Field& fieldGF() const;
+		Field& fieldGF();
 
-		const IntField& fieldF() const;
+		IntField& fieldF();
 
 						/////////////////////////
 		        			//functions for entries//
@@ -108,7 +108,7 @@ namespace LinBox
 		 * @param j Column number 0...coldim () - 1
 		 * @param a_mij Element to set
 		 */
-		void setEntry (size_t m, size_t i, size_t j, const MatrixElement &a_mij);
+		void setEntry (size_t m, size_t i, size_t j, _MatrixElement &a_mij);
 		
 	private:
 		/* Get a writeable reference to the m-th matrix-coefficient at the (i, j) position.
@@ -117,7 +117,7 @@ namespace LinBox
 		 * @param j Column index of entry
 		 * @returns Reference to matrix entry
 		 */
-		MatrixElement &refEntry (size_t m, size_t i, size_t j);
+		_MatrixElement &refEntry (size_t m, size_t i, size_t j);
 
 	public:
 		/* Get a read-only reference to the m-th matrix-coefficient at the (i, j) position.
@@ -126,7 +126,7 @@ namespace LinBox
 		 * @param j Column index
 		 * @returns Const reference to matrix entry
 		 */
-		MatrixElement &getEntry (size_t m, size_t i, size_t j);
+		_MatrixElement &getEntry (size_t m, size_t i, size_t j);
 		
 						/////////////////////////////////////
 		                		//functions for matrix-coefficients//
@@ -186,7 +186,7 @@ namespace LinBox
 	public:
 		std::istream &read (std::istream &file);
 
-		std::ostream &write (std::ostream &os) const
+		std::ostream &write (std::ostream &os)
 		{
 			int K = this->length();
 			int I = this->rowdim();
