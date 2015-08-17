@@ -18,11 +18,10 @@ namespace LinBox
 		{
 			V.emplace_back(BlasMatrix<IntField, Rep>(F));
 		}
-		//!setIrreduciblePolynomial();
 	}
 
 	template < class _Field, class _MatrixElement >
-	SlicedPolynomialMatrix< _Field, _MatrixElement >::SlicedPolynomialMatrix (_Field &BF, const size_t & m1, const size_t &m2)
+	SlicedPolynomialMatrix< _Field, _MatrixElement >::SlicedPolynomialMatrix (_Field &BF, size_t & m1, size_t &m2)
 	{
 		GF = &BF;
 		IntField F_temp(GF->characteristic()); //public function to set characteristic?
@@ -32,36 +31,26 @@ namespace LinBox
 		{
 			V.emplace_back(BlasMatrix<IntField, Rep>(F, m1, m2));
 		}
-		//!setIrreduciblePolynomial();
 	}
 
-						///////////////
-						// Destructor//
-						///////////////
-
-	/*template < class _Field, class _MatrixElement >
-	SlicedPolynomialMatrix< _Field, _MatrixElement >::~SlicedPolynomialMatrix()
-	{
-		V.~vector();			
-	}*/
 						////////////////////////
 		        			//dimensions of vector//
 						////////////////////////
 
         template < class _Field, class _MatrixElement >
-	size_t SlicedPolynomialMatrix< _Field, _MatrixElement >::length() const
+	size_t SlicedPolynomialMatrix< _Field, _MatrixElement >::length()
 	{
 		return V.size();				
 	}
 
 	template < class _Field, class _MatrixElement >
-	size_t SlicedPolynomialMatrix< _Field, _MatrixElement >::rowdim() const
+	size_t SlicedPolynomialMatrix< _Field, _MatrixElement >::rowdim()
 	{
 		return V[0].rowdim();				
 	}
 
 	template < class _Field, class _MatrixElement >
-	size_t SlicedPolynomialMatrix< _Field, _MatrixElement >::coldim() const
+	size_t SlicedPolynomialMatrix< _Field, _MatrixElement >::coldim()
 	{
 		return V[0].coldim();				
 	}
@@ -113,7 +102,7 @@ namespace LinBox
 						/////////////////////////////////////
 
 	template < class _Field, class _MatrixElement >
-	void SlicedPolynomialMatrix< _Field,  _MatrixElement >::setMatrixCoefficient (size_t m, const BlasMatrix<IntField, Rep> &V_m)
+	void SlicedPolynomialMatrix< _Field,  _MatrixElement >::setMatrixCoefficient (size_t m, BlasMatrix<IntField, Rep> &V_m)
 	{
 		V[m] = V_m;
 	}
@@ -126,8 +115,8 @@ namespace LinBox
 	}
 
 	template < class _Field, class _MatrixElement >
-	const BlasMatrix<Givaro::Modular<_MatrixElement>, std::vector<_MatrixElement>>&
-	SlicedPolynomialMatrix< _Field,  _MatrixElement >::getMatrixCoefficient (size_t m) const
+	BlasMatrix<Givaro::Modular<_MatrixElement>, std::vector<_MatrixElement>>&
+	SlicedPolynomialMatrix< _Field,  _MatrixElement >::getMatrixCoefficient (size_t m)
 	{
 		return V[m];
 	}
@@ -169,7 +158,7 @@ namespace LinBox
 						/////////////
 
 	template < class _Field, class _MatrixElement >
-	SlicedPolynomialMatrix< _Field,  _MatrixElement > SlicedPolynomialMatrix< _Field,  _MatrixElement >::transpose(SlicedPolynomialMatrix< _Field,  _MatrixElement > & tV) const
+	SlicedPolynomialMatrix< _Field,  _MatrixElement > SlicedPolynomialMatrix< _Field,  _MatrixElement >::transpose(SlicedPolynomialMatrix< _Field,  _MatrixElement > & tV)
 	{
 		//check dimensions
 		for (size_t m = 0; m < this->length(); m++)
