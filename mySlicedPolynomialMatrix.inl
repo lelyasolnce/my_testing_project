@@ -8,7 +8,7 @@ namespace LinBox
 						////////////////
 
 	template < class _Field, class _MatrixElement >
-	SlicedPolynomialMatrix< _Field, _MatrixElement >::SlicedPolynomialMatrix (const _Field &BF)
+	SlicedPolynomialMatrix< _Field, _MatrixElement >::SlicedPolynomialMatrix (_Field &BF)
 	{
 		GF = &BF;
 		IntField F_temp(GF->characteristic()); //public function to set characteristic?
@@ -22,7 +22,7 @@ namespace LinBox
 	}
 
 	template < class _Field, class _MatrixElement >
-	SlicedPolynomialMatrix< _Field, _MatrixElement >::SlicedPolynomialMatrix (const _Field &BF, const size_t & m1, const size_t &m2)
+	SlicedPolynomialMatrix< _Field, _MatrixElement >::SlicedPolynomialMatrix (_Field &BF, const size_t & m1, const size_t &m2)
 	{
 		GF = &BF;
 		IntField F_temp(GF->characteristic()); //public function to set characteristic?
@@ -39,11 +39,11 @@ namespace LinBox
 						// Destructor//
 						///////////////
 
-	template < class _Field, class _MatrixElement >
+	/*template < class _Field, class _MatrixElement >
 	SlicedPolynomialMatrix< _Field, _MatrixElement >::~SlicedPolynomialMatrix()
 	{
 		V.~vector();			
-	}
+	}*/
 						////////////////////////
 		        			//dimensions of vector//
 						////////////////////////
@@ -71,15 +71,15 @@ namespace LinBox
 	                    			/////////////////
 
 	template < class _Field, class _MatrixElement >
-	const typename SlicedPolynomialMatrix< _Field, _MatrixElement >::Field&
-	SlicedPolynomialMatrix< _Field, _MatrixElement >::fieldGF() const
+	typename SlicedPolynomialMatrix< _Field, _MatrixElement >::Field&
+	SlicedPolynomialMatrix< _Field, _MatrixElement >::fieldGF()
 	{
 		return *GF;
 	}
 
 	template < class _Field, class _MatrixElement >
-	const typename SlicedPolynomialMatrix< _Field, _MatrixElement >::IntField&
-	SlicedPolynomialMatrix< _Field, _MatrixElement >::fieldF() const
+	typename SlicedPolynomialMatrix< _Field, _MatrixElement >::IntField&
+	SlicedPolynomialMatrix< _Field, _MatrixElement >::fieldF()
 	{
 		return F;
 	}
@@ -89,7 +89,7 @@ namespace LinBox
 						/////////////////////////
 		
         template < class _Field, class _MatrixElement >
-	void SlicedPolynomialMatrix< _Field,  _MatrixElement >::setEntry (size_t m, size_t i, size_t j, const MatrixElement &a_mij)
+	void SlicedPolynomialMatrix< _Field,  _MatrixElement >::setEntry (size_t m, size_t i, size_t j, _MatrixElement &a_mij)
 	{
 		V[m].setEntry(i, j, a_mij);
 	}
@@ -102,7 +102,7 @@ namespace LinBox
 	}
 
 	template < class _Field, class _MatrixElement >
-	_MatrixElement & SlicedPolynomialMatrix< _Field,  _MatrixElement >::getEntry (size_t m, size_t i, size_t j)
+	_MatrixElement& SlicedPolynomialMatrix< _Field,  _MatrixElement >::getEntry (size_t m, size_t i, size_t j)
 	{
 		return V[m].getEntry(i, j);
 
@@ -155,7 +155,7 @@ namespace LinBox
 	{
 		for (size_t m = 0; m < this->length(); m++)
 		{
-			for (size_t i = 0; i < this->colrow(); i++)
+			for (size_t i = 0; i < this->rowdim(); i++)
 			{
 				MatrixElement c = this->getEntry(m, i, j1);
 				this->setEntry(m, i, j1, this->getEntry(m, i, j2));
