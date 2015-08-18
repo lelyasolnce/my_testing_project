@@ -8,6 +8,40 @@
 
 namespace LinBox
 {
+	/*
+	template<class Field, class Operand1, class Operand2, class Operand3>
+	SlicedPolynomialMatrixMulKaratsuba<Field, Operand1, Operand2, Operand3 >::vec& 
+		SlicedPolynomialMatrixMulKaratsuba<Field, Operand1, Operand2, Operand3 >::modulo(vec& C, int n, polynomial irreducible)
+	{
+		int m = C.size();
+		int mi = C[0].rowdim();
+		int mj = C[0].coldim();
+		vec result(n, mi, mj);
+		for (int i = 0; i < mi; i++)
+		{
+			for (int j = 0; j < mj; j++)
+			{
+				polynomial entry;
+				for (int k = 0; k < mk; k++)
+				{
+					entry.push_back(C[k].getEntry(i, j));
+				}
+				polynomial w1;
+				Poly1Dom<IF,Dense>::div(w1, entry, irreducible);
+				polynomial w2;
+				Poly1Dom<IF,Dense>::mul(w2, w1, irreducible);
+				Poly1Dom<IF,Dense>::sub(w1, entry, w2);
+				for (int k = 0; k < n; k++)
+				{
+					result[k].setEntry(i, j, w1[k]);
+				}
+			}
+		}
+		C = result;
+		return C;
+	}
+	*/
+
 	template<class GField, class Operand1, class Operand2, class Operand3>
 	typename SlicedPolynomialMatrixMulKaratsuba<GField, Operand1, Operand2, Operand3 >::vec&
 		SlicedPolynomialMatrixMulKaratsuba<GField, Operand1, Operand2, Operand3 >::karatsuba(IF& F, vec& C, vec& A, vec& B)
@@ -76,7 +110,7 @@ namespace LinBox
 			{
 				for (int i = minlength_b; i < maxlength_b; i++)
 				{
-					B3.push_back(B2[i]);
+					B3.push_back(B1[i]);
 				}
 			}
 			vec C1;
@@ -213,30 +247,23 @@ namespace LinBox
 			C1.push_back(CC);
 		}
 		karatsuba(C.fieldF(), C1, A1, B1);
-		
-		PolyDom polydom(C.fieldF());
-		polynomial _irred = C.irreducible();
-		int mk = C1.size();
-		int mi = C1[0].rowdim();
-		int mj = C1[0].coldim();
-
-		for (int i = 0; i < mi; i++)
+		std::filebuf fb3; fb3.open("file3.txt", std::ios::out); std::ostream file3(&fb3);
+		for (int m = 0; m < C1.size(); m++)
 		{
-			for (int j = 0; j < mj; j++)
+			for (int i = 0; i < C1[0].rowdim(); i++)
 			{
-				polynomial entry;
-				for (int k = 0; k < mk; k++)
+				for (int j = 0; j < C1[0].coldim(); j++)
 				{
-					entry.push_back(C1[k].getEntry(i, j));
+					file3<<C1[0].getEntry(i, j)<<" ";
 				}
-				
-				polynomial result;
-				polydom.mod(result, entry, _irred);
-				for (size_t k = 0; k < C.length(); k++)
-				{
-					C.setEntry(k, i, j, result[k]);
-				}
+				file3<<"\n";
 			}
+			file3<<"\n";
+		}
+		//modulo(C1, C.length(), C.irreducible);
+		for (int m = 0; m < C.length(); m++)
+		{
+			C.setMatrixCoefficient(m, C1[m]);
 		}
 		return C;
 	}
